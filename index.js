@@ -28,7 +28,6 @@ function decompressBuffer(buf) {
                 d += recover;
             }
         } else {
-            if (d > 6000000) console.log(d);
             out.writeUInt8(byte, d);
             d++;
             z++;
