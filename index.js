@@ -125,15 +125,5 @@ module.exports = {
     compress
 };
 
-const program = require('commander');
-program
-    .arguments('<command> <infile> <outfile>')
-    .action((command, infile, outfile) => {
-        if (command === 'compress') {
-            compress(infile, outfile);
-        } else if (command === 'decompress') {
-            decompress(infile, outfile);
-        }
-    })
-    .parse(process.argv);
+
 

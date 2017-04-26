@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+const program = require('commander');
+const NisLzs = require('..');
+
+program
+    .usage(`
+        compress <infile> <outfile>
+        decompress <infile> <outfile>
+    `)
+    .arguments('<command> <infile> <outfile>')
+    .action((command, infile, outfile) => {
+        if (command === 'compress') {
+            NisLzs.compress(infile, outfile);
+        } else if (command === 'decompress') {
+            NisLzs.decompress(infile, outfile);
+        }
+    })
+    .parse(process.argv);
+
+if (!process.argv.slice(2).length) {
+    program.outputHelp();
+}

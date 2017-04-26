@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "bin": "index.js",
+  "bin": "bin/nis_lzs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/tonypolik/nis_lzs.git"
   },
   "author": "",
   "license": "MIT",
