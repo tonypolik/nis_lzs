@@ -10,25 +10,27 @@ function decompressBuffer(buf) {
     let z = 16;
     let d = 0;
 
-    let jump, recover;
+    let jump, r, recover;
 
     while (z < zSize - 4) {
-        let byte = buf.readUInt8(z);
+        let byte = buf[z];
         if (byte === flag) {
-            if (buf.readUInt8(z + 1) === flag) {
-                out.writeUInt8(flag, d);
+            if (buf[z + 1] === flag) {
+                out[d] = flag;
                 d += 1;
                 z += 2;
             } else {
-                jump = buf.readUInt8(z + 1);
+                jump = buf[z + 1];
                 if (jump > flag) jump--;
-                recover = buf.readUInt8(z + 2);
-                out.slice(-jump, -jump +recover).copy(out, d);
+                recover = buf[z + 2];
+                for (r = 0; r < recover; r++) {
+                    out[d + r] = out[d - jump + r];
+                }
                 z += 3;
                 d += recover;
             }
         } else {
-            out.writeUInt8(byte, d);
+            out[d] = byte;
             d++;
             z++;
         }
@@ -77,17 +79,17 @@ function compressBuffer(buf, ext = 'dat') {
 
         if (recover < 4) {
 
-            let byte = buf.readUInt8(d++);
+            let byte = buf[d++];
             if (byte === flag) {
-                temp.writeUInt8(byte, z++);
+                temp[z++] = byte;
             }
-            temp.writeUInt8(byte, z++);
+            temp[z++] = byte;
 
         } else {
 
-            temp.writeUInt8(flag, z++);
-            temp.writeUInt8((jump >= flag) ? jump + 1 : jump, z++);
-            temp.writeUInt8(recover, z++);
+            temp[z++] = flag;
+            temp[z++] = (jump >= flag) ? jump + 1 : jump;
+            temp[z++] = recover;
             d += recover;
 
         }
