@@ -12,7 +12,7 @@ function decompressBuffer(buf) {
 
     let jump, r, recover;
 
-    while (z < zSize - 4) {
+    while (z < zSize + 4) {
         let byte = buf[z];
         if (byte === flag) {
             if (buf[z + 1] === flag) {
@@ -124,6 +124,3 @@ module.exports = {
     compressBuffer,
     compress
 };
-
-
-
