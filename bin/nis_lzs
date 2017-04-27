@@ -4,10 +4,10 @@ const NisLzs = require('..');
 
 program
     .usage(`
-        compress <infile> <outfile>
-        decompress <infile> <outfile>
+        compress <infile> [outfile]
+        decompress <infile> [outfile]
     `)
-    .arguments('<command> <infile> <outfile>')
+    .arguments('<command> <infile> [outfile]')
     .action((command, infile, outfile) => {
         if (command === 'compress') {
             NisLzs.compress(infile, outfile);
