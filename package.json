@@ -17,6 +17,7 @@
     "eslint": "^3.19.0"
   },
   "dependencies": {
-    "commander": "^2.9.0"
+    "commander": "^2.9.0",
+    "fs": "0.0.1-security"
   }
 }
