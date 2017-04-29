@@ -1,6 +1,40 @@
 #!/usr/bin/env node
 const program = require('commander');
+const fs = require('fs');
+const path = require('path');
 const NisLzs = require('..');
+
+function decompress(inFileName, outFileName) {
+    fs.readFile(inFileName, (err, buf) => {
+        let {buffer, extension} = NisLzs.decompressBuffer(buf);
+
+        if (!outFileName) {
+            let lzsExtension = path.extname(inFileName);
+            let baseName = path.basename(inFileName, lzsExtension);
+            outFileName = `${baseName}.${extension}`;
+        }
+
+        fs.writeFile(outFileName, buffer, function(err) {
+            if (err) console.error(err);
+            else console.log('File decompressed');
+        });
+    });
+}
+
+function compress(inFileName, outFileName) {
+    fs.readFile(inFileName, (err, buf) => {
+        let extension = path.extname(inFileName);
+        if (!outFileName) {
+            let baseName = path.basename(inFileName, extension);
+            outFileName = `${baseName}.lzs`;
+        }
+        let out = NisLzs.compressBuffer(buf, extension.replace('.', ''));
+        fs.writeFile(outFileName, out, function(err) {
+            if (err) console.error(err);
+            else console.log('File compressed');
+        });
+    });
+}
 
 program
     .usage(`
@@ -10,9 +44,9 @@ program
     .arguments('<command> <infile> [outfile]')
     .action((command, infile, outfile) => {
         if (command === 'compress') {
-            NisLzs.compress(infile, outfile);
+            compress(infile, outfile);
         } else if (command === 'decompress') {
-            NisLzs.decompress(infile, outfile);
+            decompress(infile, outfile);
         }
     })
     .parse(process.argv);

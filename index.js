@@ -1,7 +1,4 @@
 'use strict';
-const fs = require('fs');
-const path = require('path');
-
 function decompressBuffer(buf) {
     let extension = buf.toString('utf8', 0, 3);
     let dSize = buf.readUInt32LE(4);
@@ -42,23 +39,6 @@ function decompressBuffer(buf) {
         buffer: out,
         extension: extension
     };
-}
-
-function decompress(inFileName, outFileName) {
-    fs.readFile(inFileName, (err, buf) => {
-        let {buffer, extension} = decompressBuffer(buf);
-
-        if (!outFileName) {
-            let lzsExtension = path.extname(inFileName);
-            let baseName = path.basename(inFileName, lzsExtension);
-            outFileName = `${baseName}.${extension}`;
-        }
-
-        fs.writeFile(outFileName, buffer, function(err) {
-            if (err) console.error(err);
-            else console.log('File decompressed');
-        });
-    });
 }
 
 function compressBuffer(buf, ext = 'dat') {
@@ -120,24 +100,9 @@ function compressBuffer(buf, ext = 'dat') {
     return Buffer.concat([header, lzs]);
 }
 
-function compress(inFileName, outFileName) {
-    fs.readFile(inFileName, (err, buf) => {
-        let extension = path.extname(inFileName);
-        if (!outFileName) {
-            let baseName = path.basename(inFileName, extension);
-            outFileName = `${baseName}.lzs`;
-        }
-        let out = compressBuffer(buf, extension.replace('.', ''));
-        fs.writeFile(outFileName, out, function(err) {
-            if (err) console.error(err);
-            else console.log('File compressed');
-        });
-    });
-}
+
 
 module.exports = {
     decompressBuffer,
-    decompress,
-    compressBuffer,
-    compress
+    compressBuffer
 };
